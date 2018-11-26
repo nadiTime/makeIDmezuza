@@ -7,6 +7,8 @@
   <body>
     <script src="howler.js-master/dist/howler.min.js"></script>
     <script>
+      var abanibiCounter = 0;
+      var abanibiFired = false;
       var secondTime = false;
       var longPress = false;
       var timebetween = 0;
@@ -18,9 +20,17 @@
       });
       document.addEventListener('keydown', (event) => {
         if(!fired) {
+          abanibiCounter++;
+          abanibiFired = false;
+          if(abanibiCounter>10){
+            console.log('abanibi');
+            abanibiCounter = 0;
+            pressState = 'free';
+            abanibiFired = true;
+          }
           fired= true;
           timebetween = 0;
-          if(pressState == 'free'){
+          if(pressState == 'free' &! abanibiFired){
             console.log('kiss');
             secondTime = false;
           }
@@ -41,10 +51,11 @@
         }
       });
       document.addEventListener('keyup', (event) => {
+        abanibiFired = false;
         fired = false;
         longPress = false;
         clearInterval(count);
-        if(timebetween <= 1000 && pressState=='free' &! secondTime){
+        if(timebetween <= 1000 && pressState=='free' &! secondTime &! abanibiFired){
           console.log('rega rega');
           pressState = 'press1';
         }
