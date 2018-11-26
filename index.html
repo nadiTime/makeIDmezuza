@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script src="howler.js-master/dist/howler.min.js"></script>
+    <script>
+      var secondTime = false;
+      var longPress = false;
+      var timebetween = 0;
+      var count = null;
+      var fired = false;
+      var pressState = 'free';
+      var sound = new Howl({
+        src: ['kiss2.mp3']
+      });
+      document.addEventListener('keydown', (event) => {
+        if(!fired) {
+          fired= true;
+          timebetween = 0;
+          if(pressState == 'free'){
+            console.log('kiss');
+            secondTime = false;
+          }
+          if(pressState == 'press1'){
+            console.log('second time');
+            pressState = 'free';
+            secondTime = true;      
+          }
+          count = setInterval(function(){
+              timebetween++;
+              //console.log(timebetween);
+              if(timebetween > 1000 && !longPress){
+                console.log('long');
+                longPress = true;
+              }
+          }, 1);
+          //sound.play();
+        }
+      });
+      document.addEventListener('keyup', (event) => {
+        fired = false;
+        longPress = false;
+        clearInterval(count);
+        if(timebetween <= 1000 && pressState=='free' &! secondTime){
+          console.log('rega rega');
+          pressState = 'press1';
+        }
+        else if(timebetween > 1000 ){
+          pressState = 'free';
+        }
+        //console.log("final time is" +timebetween);
+      });
+    </script>
+  </body>
+</html>
